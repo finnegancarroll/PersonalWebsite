@@ -5,6 +5,8 @@ var MSINS = 1000;
 var canvas = document.querySelector('#graphcanvas');
 var gl = canvas.getContext('webgl');
 var program;
+var width;
+var height;
 
 //Verticies of our graph
 var verticies = [
@@ -58,8 +60,17 @@ var edges = [
 var velocities = [];
 
 function main() {
-    gl.canvas.width = window.innerWidth;
-    gl.canvas.height = window.innerHeight;
+
+    //The canvas must be resized here
+    //So we get the dimensions of our page
+    var pagetop = document.getElementById("page-top");
+    width = pagetop.offsetWidth;
+    //Height of the window adjusted for nav bar
+    var nav = document.getElementById("mainNav");
+    height = innerHeight - nav.offsetHeight; 
+
+    gl.canvas.width = width;
+    gl.canvas.height = height;
 
     if (!gl) {
         alert('Unable to initialize WebGL. Your browser or machine may not support it.');
@@ -89,7 +100,7 @@ function main() {
 function render(fps) {
 
     // Describes how we iterate through the vertex buffer for rendering
-    var size = verticies[0].length;          // Dimension of elemends (2d/34,...)
+    var size = verticies[0].length; // Dimension of elemends (2d/34,...)
     var type = gl.FLOAT;   // the data is 32bit floats
     var normalize = false; // don't normalize the data
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
@@ -101,6 +112,13 @@ function render(fps) {
 
     var timestep = 1 / (fps * 10);
     updateVerticies(verticies.length, size, timestep);
+
+    //Resize canvas if window dimensions change
+    var pagetop = document.getElementById("page-top");
+    if (width != pagetop.offsetWidth) {
+        width = pagetop.offsetWidth;
+        gl.canvas.width = width;
+    }
 
     //Set clear color 
     gl.clearColor(0, 0, 0, 1);

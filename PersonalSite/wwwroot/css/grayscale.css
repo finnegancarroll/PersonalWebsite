@@ -86,7 +86,7 @@
 
 .masthead {
   position: relative;
-  width: 100%;
+  width: auto;
   height: auto;
   min-height: 35rem;
   padding: 15rem 0;
@@ -162,6 +162,12 @@
   background-color: #467370 !important;
 }
 
+.graphcanvas {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
 .about-section {
   padding-top: 10rem;
   background: linear-gradient(to bottom, #161616 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.8) 100%);
@@ -222,7 +228,7 @@
   border: 0;
 }
 
-.contact-section {
+.wct-section {
   padding: 5rem 0 0;
 }
 
