@@ -86,7 +86,6 @@ function main() {
     //Create and use program
     program = createProgram(gl, vertexShader, pixelShader);
     gl.useProgram(program);
-
     //Create vertex buffer
     var positionBuffer = gl.createBuffer();
     //Bind vertex buffer to GPU "handle"
@@ -121,13 +120,13 @@ function render(fps) {
     }
 
     //Set clear color 
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0, 0, 0, 0);
     //Clear the color buffer with specified clear color
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     //Load vertices into vertex buffer
-    //gl.STATIC_DRAW => We will not be changing these vertices much
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(getLines()), gl.STATIC_DRAW);
+    //gl.DYNAMIC_DRAW => Verticies will change frequently
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(getLines()), gl.DYNAMIC_DRAW);
 
     //Starting choords and size of screen we will project onto
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -144,6 +143,7 @@ function render(fps) {
 
 //A vertex with multiple edges will be passed to opengl once per edge
 function getLines() {
+
     var lines = [];
 
     //For each edge add the corresponding verticies to the 
