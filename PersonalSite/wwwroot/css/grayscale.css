@@ -162,6 +162,7 @@
   background-color: #467370 !important;
 }
 
+/* DELETE THIS MAYBE? CANVAS MUST BE RESIZED IN JS */
 .graphcanvas {
     width: 100%;
     height: 100%;

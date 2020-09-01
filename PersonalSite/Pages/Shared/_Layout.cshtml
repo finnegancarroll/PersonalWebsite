@@ -24,9 +24,10 @@
 
 </head>
 
-<body id="page-top" style="background-color:black">
+<body id="page-top" style="background-color:#161616">
 
     <!-- NAVIGATION -->
+
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">Home</a>
@@ -37,7 +38,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#graphcanvas">About</a>
+                        <a class="nav-link js-scroll-trigger" href="#about">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#projects">Projects</a>
@@ -51,15 +52,6 @@
     </nav>
 
     <!-- HEADER -->
-    <header class="masthead">
-        <div class="container d-flex h-100 align-items-center">
-            <div class="mx-auto text-center">
-                <h1 class="mx-auto my-0 text-uppercase">Personal Website</h1>
-                <h2 class="text-white-50 mx-auto mt-2 mb-5">Secondary Title</h2>
-            </div>
-        </div>
-    </header>
-
     <!-- GRAPH ANIMATION SECTION -->
     <!-- Vertex Shader -->
     <script id="vertexshader" type="notjs">
@@ -83,39 +75,43 @@
 
     </script>
 
-    <!-- GRAPH ANIMATION -->
-    <canvas id="graphcanvas" style="background: url('img/1.jpg')"></canvas> 
+    <canvas id="graphcanvas" class="masthead" style="background: url('img/homeBackground.jpg')"></canvas>
 
     <script src="~/js/graphanimation.js" asp-append-version="true"></script>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="contact-section bg-black">
+    <!-- ABOUT -->
+
+    <section id="about" class="contact-section bg-black">
         <div class="container">
 
-            <!-- Featured Project Row -->
-            <div class="row align-items-center no-gutters mb-4 mb-lg-5">
-                <div class="col-xl-8 col-lg-7">
-                    <img class="img-fluid mb-3 mb-lg-0" src="img/bg-masthead.jpg" alt="">
-                </div>
-                <div class="col-xl-4 col-lg-5">
-                    <div class="featured-text text-center text-lg-left">
-                        <h4>Section 2</h4>
-                        <p class="text-black-50 mb-0">Section 2 description</p>
-                    </div>
+            <!-- Selfie Row -->
+            <div class="row mb-xl-5">
+                <img src="~/img/about_1.jpg" class="float-left" style="width: 60%; height: 60%;"/>
+                <div class="float-lg-right" style="background-color: #333333;">
+                    <p class="m-2 text-white" style="text-align: center; vertical-align: text-top;">
+                        I'm a dependable and detail-oriented graduate <br>
+                        seeking software development opportunities in which <br>
+                        i can delve into and expand upon complex systems. <br>
+                        I love reading
+                    </p>
                 </div>
             </div>
 
-            <!-- Project One Row -->
+            <!-- Seattle University Row -->
             <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
                 <div class="col-lg-6">
-                    <img class="img-fluid" src="img/demo-image-01.jpg" alt="">
+                    <img class="img-fluid" src="~/img/about_2.jpg" alt="">
                 </div>
                 <div class="col-lg-6">
                     <div class="bg-black text-center h-100 project">
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-left">
-                                <h4 class="text-white">Wow three hills</h4>
-                                <p class="mb-0 text-white-50">Three of them</p>
+                                <h4 class="text-white" style="text-align: center; vertical-align: text-top;">About Me</h4>
+                                <p class="mb-0 text-white-50" style="text-align: center; vertical-align: text-top;">
+                                    I'm a dependable and detail-oriented graduate seeking software development
+                                    opportunities in which i can delve into and expand upon complex systems.
+                                    I love reading
+                                </p>
                                 <hr class="d-none d-lg-block mb-0 ml-0">
                             </div>
                         </div>
@@ -123,28 +119,60 @@
                 </div>
             </div>
 
-            <!-- Project Two Row -->
-            <div class="row justify-content-center no-gutters">
+            <!-- SDI Row -->
+            <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
                 <div class="col-lg-6">
-                    <img class="img-fluid" src="img/demo-image-02.jpg" alt="">
-                </div>
-                <div class="col-lg-6 order-lg-first">
                     <div class="bg-black text-center h-100 project">
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-right">
-                                <h4 class="text-white">Misty</h4>
-                                <p class="mb-0 text-white-50">Dont forget about the TODO comments!</p>
-                                <hr class="d-none d-lg-block mb-0 mr-0">
+                                <h4 class="text-white" style="text-align: center; vertical-align: text-top;">About Me</h4>
+                                <p class="mb-0 text-white-50" style="text-align: center; vertical-align: text-top;">
+                                    I'm a dependable and detail-oriented graduate seeking software development
+                                    opportunities in which i can delve into and expand upon complex systems.
+                                    I love reading
+                                </p>
+                                <hr class="d-none d-lg-block mb-0 ml-0">
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-6">
+                    <img class="img-fluid" src="~/img/about_3.jpg" alt="">
                 </div>
             </div>
 
         </div>
     </section>
 
+    <!-- PROJECTS -->
+    
+    <!-- TODO MAKE IT LIKE A GALLERY THAT LINKS TO GITHUB, HAVE THE PICS RESPOND WHEN MOUSED OVER (LIGHT UP?) -->
+    <div id="projects" class="about-section">
+        <h1 class="text-white">PROJECTS HERE</h1>
+        <p class="mb-0 text-white-50">PHOTO HREF GALLERY OF PROJECT WHICH LINK TO GITHUB here</p>
+
+        <!-- Project One Row -->
+        <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+            <div class="col-lg-6">
+                <img class="img-fluid" src="img/demo-image-01.jpg" alt="">
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-left">
+                            <h4 class="text-white">Wow three hills</h4>
+                            <p class="mb-0 text-white-50">Three of them</p>
+                            <hr class="d-none d-lg-block mb-0 ml-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <!-- CONTACT -->
+
     <section id="contact" class="contact-section bg-black">
         <div class="container">
 
