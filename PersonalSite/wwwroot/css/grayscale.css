@@ -233,6 +233,10 @@
   padding: 5rem 0 0;
 }
 
+.projects-section .text-primary {
+    color: #DDDDDD !important;
+}
+
 .contact-section .card {
   border: 0;
   border-bottom: 0.25rem solid #64a19d;
@@ -301,4 +305,30 @@ a:focus, a:hover {
 
 footer {
   padding: 5rem 0;
+}
+
+.card-img-top {
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin-left: 25%;
+    margin-right: 25%;
+    width: 50%;
+    height: 100%;
+    position: absolute;
+}
+
+.card-img-top:hover {
+    opacity: .3;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin-left: 25%;
+    margin-right: 25%;
+    width: 50%;
+    height: 100%;
+    position: absolute;
 }
