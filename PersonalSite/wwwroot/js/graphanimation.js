@@ -117,6 +117,10 @@ function render(fps) {
     if (width != pagetop.offsetWidth) {
         width = pagetop.offsetWidth;
         gl.canvas.width = width;
+
+        console.log(width);
+        console.log(gl.canvas.width);
+
     }
 
     //Set clear color 

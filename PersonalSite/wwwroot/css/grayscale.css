@@ -85,16 +85,15 @@
 }
 
 .masthead {
-  position: relative;
-  width: auto;
-  height: auto;
-  min-height: 35rem;
-  padding: 15rem 0;
-  background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%), url("../img/bg-masthead.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: scroll;
-  background-size: cover;
+    position: relative;
+    width: max-content;
+    min-height: 35rem;
+    padding: 15rem 0;
+    background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%), url("../img/bg-masthead.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: cover;
 }
 
 .masthead h1 {
@@ -309,26 +308,24 @@ footer {
 
 .card-img-top {
     opacity: 0;
+    z-index: 100;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
-    margin-left: 25%;
-    margin-right: 25%;
-    width: 50%;
+    width: 100%;
     height: 100%;
     position: absolute;
 }
 
 .card-img-top:hover {
-    opacity: .3;
+    opacity: .2;
+    z-index: 100;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
-    margin-left: 25%;
-    margin-right: 25%;
-    width: 50%;
     height: 100%;
+    width: 100%;
     position: absolute;
 }
