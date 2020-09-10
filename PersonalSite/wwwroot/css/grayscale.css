@@ -329,3 +329,11 @@ footer {
     width: 100%;
     position: absolute;
 }
+
+.projects-section .card {
+    background-color: black;
+}
+
+.projects-section .row {
+    height: 50vh;
+}
