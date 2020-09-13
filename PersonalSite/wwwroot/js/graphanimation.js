@@ -4,6 +4,8 @@ var MSINS = 1000;
 
 var canvas = document.querySelector('#graphcanvas');
 var gl = canvas.getContext('webgl');
+//Seconds to cross screen on average
+var speed = 20;
 var program;
 var width;
 var height;
@@ -117,8 +119,7 @@ function render(fps) {
     var offset = 0;
     var edgeCount = edges.length;
 
-    var timestep = 1 / (fps * 10);
-    updateVerticies(verticies.length, size, timestep);
+    updateVerticies(verticies.length, size, fps);
 
     //Resize canvas if window dimensions change
     var pagetop = document.getElementById("page-top");
@@ -172,16 +173,22 @@ function getLines() {
 }
 
 //Update the positions of verticies based on velocity and timestep
-function updateVerticies(count, size, timestep) {
+function updateVerticies(count, size, fps) {
 
     //There are "count" many verticies each of dimension "size"
     //For each we update their position based on their velocity
     for (i = 0; i < count; i++) {
         for (j = 0; j < size; j++) {
 
+            //The average velocity is .5
+            //So if we update the a vertex position by ~.5/fps
+            //the vertex will cross about half of the screen in one second
+            //multiplying this update by 2/speed causes the vertex to cross 
+            //the screen in speed # of seconds 
+            var newPosition = verticies[i][j] + ((2/speed) * ((1/fps) * velocities[i][j]));
+
             //New position out of bounds => reverse velocity
             //Else update position as normal
-            var newPosition = verticies[i][j] + (timestep * velocities[i][j]);
             if (Math.abs(newPosition) > 1) {
                 velocities[i][j] = velocities[i][j] * -1;
                 verticies[i][j] = newPosition;
@@ -201,6 +208,7 @@ var frameCount = 0;
 var lastUpdateTime = Date.now();
 var UPDATE_INTERVAL = 50;
 function renderLoop() {
+
     //Have UPDATE_INTERVAL milliseconds passed?
     if (Date.now() - lastUpdateTime > UPDATE_INTERVAL) {
         //Calculate new frameRate in fps
@@ -217,18 +225,9 @@ function renderLoop() {
     window.requestAnimationFrame(renderLoop);
 }
 
-/*
-//Loops the render function
-function renderLoop() {
-    //Recursive call to renderLoop()
-    var fps = 60;
-    render(fps);
-    window.requestAnimationFrame(renderLoop);
-}
-*/
-
 //Randomize the velocities of verticies
 function randomizeVel() {
+
     for (i = 0; i < verticies.length; i++) {
         var xVel = Math.random();
         //Binary coin flip
@@ -249,9 +248,11 @@ function createShader(gl, shaderName, source) {
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
     var result = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+
     if (result) {
         return shader;
     }
+
     //else
     gl.deleteShader();
     window.alert("Shader Creation Failed:" + shaderName);
@@ -264,6 +265,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
     var success = gl.getProgramParameter(program, gl.LINK_STATUS);
+
     if (success) {
         return program;
     }
