@@ -93,6 +93,14 @@ function main() {
     //Randomize velocities
     randomizeVel();
 
+    //gl.enable(gl.BLEND);
+    //gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
+
+    gl.enable(gl.SAMPLE_COVERAGE);
+    gl.sampleCoverage(0.7, false);
+
+    gl.disable(gl.GL_DEPTH_TEST);
+
     renderLoop();
 }
 
@@ -117,10 +125,6 @@ function render(fps) {
     if (width != pagetop.offsetWidth) {
         width = pagetop.offsetWidth;
         gl.canvas.width = width;
-
-        console.log(width);
-        console.log(gl.canvas.width);
-
     }
 
     //Set clear color 
@@ -188,15 +192,40 @@ function updateVerticies(count, size, timestep) {
     }
 }
 
+
+//Loops the render function
+//By tracking the speed at which we render we
+//adjust our velocities such that lines move at uniform speeds across machines
+var frameRate = 1;
+var frameCount = 0;
+var lastUpdateTime = Date.now();
+var UPDATE_INTERVAL = 50;
+function renderLoop() {
+    //Have UPDATE_INTERVAL milliseconds passed?
+    if (Date.now() - lastUpdateTime > UPDATE_INTERVAL) {
+        //Calculate new frameRate in fps
+        frameRate = (frameCount / (Date.now() - lastUpdateTime)) * MSINS;
+        //Reset frameCount and update last update timestamp
+        lastUpdateTime = Date.now();
+        frameCount = 0;
+
+        console.log(frameRate);
+    }
+
+    frameCount++;
+    render(frameRate);
+    window.requestAnimationFrame(renderLoop);
+}
+
+/*
 //Loops the render function
 function renderLoop() {
     //Recursive call to renderLoop()
-    //1000 ms in a second, we will aim for 60 frames a second
     var fps = 60;
-    var fixedStep = MSINS / fps;
     render(fps);
-    window.setTimeout(renderLoop, fixedStep);
+    window.requestAnimationFrame(renderLoop);
 }
+*/
 
 //Randomize the velocities of verticies
 function randomizeVel() {

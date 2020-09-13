@@ -337,3 +337,11 @@ footer {
 .projects-section .row {
     height: 50vh;
 }
+
+.projects-section h4 {
+    font-size: 3vh;
+}
+
+.projects-section p {
+    font-size: 2vh;
+} 
