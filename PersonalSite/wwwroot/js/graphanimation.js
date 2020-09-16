@@ -1,15 +1,5 @@
 ﻿//https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 
-var MSINS = 1000;
-
-var canvas = document.querySelector('#graphcanvas');
-var gl = canvas.getContext('webgl');
-//Seconds to cross screen on average
-var speed = 20;
-var program;
-var width;
-var height;
-
 //Verticies of our graph
 var verticies = [
     [-0.85, -0.85],
@@ -59,7 +49,17 @@ var edges = [
     [10, 11]
 ];
 
+//milliseconds in a second
+var MSINS = 1000;
+
+var canvas = document.querySelector('#graphcanvas');
+var gl = canvas.getContext('webgl');
 var velocities = [];
+//Seconds to cross screen on average
+var speed = 20;
+var program;
+var width;
+var height;
 
 function main() {
 
@@ -88,36 +88,73 @@ function main() {
     //Create and use program
     program = createProgram(gl, vertexShader, pixelShader);
     gl.useProgram(program);
-    //Create vertex buffer
+
+    //Create and bind vertex buffer to GPU "handle"
     var positionBuffer = gl.createBuffer();
-    //Bind vertex buffer to GPU "handle"
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    //Randomize velocities
-    randomizeVel();
 
-    //gl.enable(gl.BLEND);
-    //gl.blendFunc(gl.SRC_COLOR, gl.DST_COLOR);
-
+    //Some very basic anti aliasing
     gl.enable(gl.SAMPLE_COVERAGE);
     gl.sampleCoverage(0.7, false);
 
-    gl.disable(gl.GL_DEPTH_TEST);
+    //Set clear color 
+    gl.clearColor(0, 0, 0, 0);
+
+    //Clear the color buffer with specified clear color
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    //Link the program to the attributes in the buffer
+    var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+    //Enable vertex buffer
+    gl.enableVertexAttribArray(positionAttributeLocation);
+    //Set how vertices are pulled out of the buffer for rendering
+    gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
+
+    //Randomize velocities
+    randomizeVel();
+
+
 
     renderLoop();
 }
 
+//Loops the render function
+//By tracking the speed at which we render we
+//adjust our velocities such that lines move at uniform speeds across machines
+var frameRate = 60;
+var frameCount = 60;
+var lastUpdateTime = Date.now();
+var UPDATE_INTERVAL = 50;
+function renderLoop() {
+
+    //Have UPDATE_INTERVAL milliseconds passed?
+    if (Date.now() - lastUpdateTime > UPDATE_INTERVAL) {
+        //Calculate new frameRate in fps
+        frameRate = (frameCount / (Date.now() - lastUpdateTime)) * MSINS;
+        //Reset frameCount and update last update timestamp
+        lastUpdateTime = Date.now();
+        frameCount = 0;
+    }
+
+    console.log(frameRate);
+
+    frameCount++;
+    render(frameRate);
+    window.requestAnimationFrame(renderLoop);
+}
+
+// Describes how we iterate through the vertex buffer for rendering
+var size = verticies[0].length; // Dimension of elemends (2d/34,...)
+var type = gl.FLOAT;   // the data is 32bit floats
+var normalize = false; // don't normalize the data
+var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+
+//What/Where/How many?
+var primitiveType = gl.LINES;
+var offset = 0;
+var edgeCount = edges.length;
+
 function render(fps) {
-
-    // Describes how we iterate through the vertex buffer for rendering
-    var size = verticies[0].length; // Dimension of elemends (2d/34,...)
-    var type = gl.FLOAT;   // the data is 32bit floats
-    var normalize = false; // don't normalize the data
-    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-
-    //What/Where/How many?
-    var primitiveType = gl.LINES;
-    var offset = 0;
-    var edgeCount = edges.length;
 
     updateVerticies(verticies.length, size, fps);
 
@@ -128,11 +165,6 @@ function render(fps) {
         gl.canvas.width = width;
     }
 
-    //Set clear color 
-    gl.clearColor(0, 0, 0, 0);
-    //Clear the color buffer with specified clear color
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
     //Load vertices into vertex buffer
     //gl.DYNAMIC_DRAW => Verticies will change frequently
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(getLines()), gl.DYNAMIC_DRAW);
@@ -140,14 +172,34 @@ function render(fps) {
     //Starting choords and size of screen we will project onto
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    //Link the program to the attributes in the buffer
-    var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-    //Enable vertex buffer
-    gl.enableVertexAttribArray(positionAttributeLocation);
-    //Set how vertices are pulled out of the buffer for rendering
-    gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
-
     gl.drawArrays(primitiveType, offset, edgeCount * size);
+}
+
+//Update the positions of verticies based on velocity and timestep
+function updateVerticies(count, size, fps) {
+
+    //There are "count" many verticies each of dimension "size"
+    //For each we update their position based on their velocity
+    for (i = 0; i < count; i++) {
+        for (j = 0; j < size; j++) {
+
+            //The average velocity is .5
+            //So if we update the a vertex position by ~.5/fps
+            //the vertex will cross about half of the screen in one second
+            //multiplying this update by 2/speed causes the vertex to cross 
+            //the screen in speed # of seconds 
+            //Note: We add 1 to fps in the case that fps approaches zero
+            var newPosition = verticies[i][j] + ((2 / speed) * ((1 / (fps + 1)) * velocities[i][j]));
+            
+            //New position out of bounds => reverse velocity
+            //Else update position as normal
+            if (Math.abs(newPosition) >= 1) {
+                velocities[i][j] = velocities[i][j] * -1;
+            } else {
+                verticies[i][j] = newPosition;
+            }
+        }
+    }
 }
 
 //A vertex with multiple edges will be passed to opengl once per edge
@@ -170,59 +222,6 @@ function getLines() {
     }
 
     return lines;
-}
-
-//Update the positions of verticies based on velocity and timestep
-function updateVerticies(count, size, fps) {
-
-    //There are "count" many verticies each of dimension "size"
-    //For each we update their position based on their velocity
-    for (i = 0; i < count; i++) {
-        for (j = 0; j < size; j++) {
-
-            //The average velocity is .5
-            //So if we update the a vertex position by ~.5/fps
-            //the vertex will cross about half of the screen in one second
-            //multiplying this update by 2/speed causes the vertex to cross 
-            //the screen in speed # of seconds 
-            var newPosition = verticies[i][j] + ((2/speed) * ((1/fps) * velocities[i][j]));
-
-            //New position out of bounds => reverse velocity
-            //Else update position as normal
-            if (Math.abs(newPosition) > 1) {
-                velocities[i][j] = velocities[i][j] * -1;
-                verticies[i][j] = newPosition;
-            } else {
-                verticies[i][j] = newPosition;
-            }
-        }
-    }
-}
-
-
-//Loops the render function
-//By tracking the speed at which we render we
-//adjust our velocities such that lines move at uniform speeds across machines
-var frameRate = 1;
-var frameCount = 0;
-var lastUpdateTime = Date.now();
-var UPDATE_INTERVAL = 50;
-function renderLoop() {
-
-    //Have UPDATE_INTERVAL milliseconds passed?
-    if (Date.now() - lastUpdateTime > UPDATE_INTERVAL) {
-        //Calculate new frameRate in fps
-        frameRate = (frameCount / (Date.now() - lastUpdateTime)) * MSINS;
-        //Reset frameCount and update last update timestamp
-        lastUpdateTime = Date.now();
-        frameCount = 0;
-
-        console.log(frameRate);
-    }
-
-    frameCount++;
-    render(frameRate);
-    window.requestAnimationFrame(renderLoop);
 }
 
 //Randomize the velocities of verticies
