@@ -51,13 +51,21 @@ var edges = [
 var MSINS = 1000;
 //Seconds to cross screen on average
 var SPEED = 20;
+//milliseconds before we re-calculate fps
+var UPDATE_INTERVAL = 50;
+
+//By tracking the speed at which we render we
+//adjust our velocities such that lines move at uniform speeds across machines
+//These variables are global because our render loop is a recursive function call
+//They could not be local variables and passing them with each call is expensive to loop
+var frameRate = 60;
+var frameCount = 60;
+var lastUpdateTime = Date.now();
 
 var canvas = document.querySelector('#graphcanvas');
 var gl = canvas.getContext('webgl');
 var velocities = [];
 var program;
-
-
 
 function main() {
 
@@ -85,14 +93,6 @@ function main() {
 //i.e. slower machines need bigger steps and fewer frames while faster machines
 //can animate with many small steps
 function renderLoop() {
-
-    //Loops the render function
-    //By tracking the speed at which we render we
-    //adjust our velocities such that lines move at uniform speeds across machines
-    var frameRate = 60;
-    var frameCount = 60;
-    var lastUpdateTime = Date.now();
-    var UPDATE_INTERVAL = 50;
 
     //Have UPDATE_INTERVAL milliseconds passed?
     if (Date.now() - lastUpdateTime > UPDATE_INTERVAL) {
